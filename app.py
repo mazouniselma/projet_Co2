@@ -7,4 +7,4 @@ app = FastAPI()
 
 @app.get("/")
 async def hello():
-    return {"hello": "world"}
+    return {"Projet Co2"}
