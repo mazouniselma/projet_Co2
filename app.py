@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -7,4 +7,4 @@ app = FastAPI()
 
 @app.get("/")
 async def hello():
-    return {"Projet Co2"}
+    return {"Projet Co2 Selma"}
