@@ -1,36 +1,22 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
-@app.get("/form", response_class=HTMLResponse)
-async def show_form():
-    return """
-        <html>
-            <head>
-                <title>Formulaire</title>
-            </head>
-            <body>
-                <h1>Formulaire</h1>
-                <form method="post" action="/submit">
-                    <label for="ELECTRICITE">ELECTRICITÉ:</label>
-                    <input type="number" id="name" name="name"><br><br>
-                    
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email"><br><br>
-                    
-                    <label for="age">Âge:</label>
-                    <input type="number" id="age" name="age"><br><br>
-                    
-                    <input type="submit" value="Soumettre">
-                </form>
-            </body>
-        </html>
-    """
+# Ajoutez cette ligne pour servir les fichiers statiques (CSS)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.post("/submit")
-async def submit_form():
-    # Traitement du formulaire
-    return {"message": "Formulaire soumis avec succès"}
+@app.get("/page")
+def show_page(request: Request):
+    message = "Bonjour, c'est une page de démonstration"
+    return templates.TemplateResponse("page.html", {"request": request, "message": message})
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
 
 
