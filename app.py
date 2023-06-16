@@ -1,25 +1,40 @@
-from fastapi import FastAPI, Form
-from pydantic import BaseModel
-from enum import Enum
-from typing import Annotated
+from fastapi import FastAPI, Request
 
-
-# Définition de la classe modèle pour le formulaire
-class UserForm(BaseModel):
-    name: str = Form(...)
-    email: str = Form(...)
-    fruit: str = Form(...)
-
-# Création de l'application FastAPI
 app = FastAPI()
 
-# Route pour la soumission du formulaire
+@app.get("/form")
+async def show_form(request: Request):
+    return """
+        <html>
+            <head>
+                <title>Formulaire</title>
+            </head>
+            <body>
+                <h1>Formulaire</h1>
+                <form method="post" action="/submit">
+                    <label for="ELECTRICITE">ELECTRICITÉ:</label>
+                    <input type="number" id="name" name="name"><br><br>
+                    
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email"><br><br>
+                    
+                    <label for="age">Âge:</label>
+                    <input type="number" id="age" name="age"><br><br>
+                    
+                    <input type="submit" value="Soumettre">
+                </form>
+            </body>
+        </html>
+    """
+
+
 @app.post("/submit")
-async def submit_form(user_form: UserForm):
-    # Traitement des données du formulaire
-    name = user_form.name
-    email = user_form.email
-    selected_fruit = user_form.fruit
+async def submit_form(request: Request):
+    form_data = await request.form()
+    name = form_data["name"]
+    email = form_data["email"]
+    age = form_data["age"]
     
-    # Exemple d'affichage des données
-    return {"message": f"Formulaire soumis avec succès. Nom: {name}, Email: {email}, Fruit sélectionné: {selected_fruit}"}
+    # Traitez les données du formulaire ici
+    return {"message": "Formulaire soumis avec succès"}
+
