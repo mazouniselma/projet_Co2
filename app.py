@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
-@app.get("/form")
-async def show_form(request: Request):
+@app.get("/form", response_class=HTMLResponse)
+async def show_form():
     return """
         <html>
             <head>
@@ -27,14 +28,9 @@ async def show_form(request: Request):
         </html>
     """
 
-
 @app.post("/submit")
-async def submit_form(request: Request):
-    form_data = await request.form()
-    name = form_data["name"]
-    email = form_data["email"]
-    age = form_data["age"]
-    
-    # Traitez les données du formulaire ici
+async def submit_form():
+    # Traitement du formulaire
     return {"message": "Formulaire soumis avec succès"}
+
 
